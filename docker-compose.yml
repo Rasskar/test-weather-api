@@ -51,6 +51,7 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+        command: [ 'sh', '-c', 'chown -R mysql:mysql /var/lib/mysql && mysqld' ]
     redis:
         container_name: weather-api-redis
         image: 'redis:alpine'
