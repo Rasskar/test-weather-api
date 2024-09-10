@@ -1,0 +1,520 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Weather API",
+        "description": "API для получения информации о погоде",
+        "contact": {
+            "email": "alekscygankov20@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Авторизация пользователя",
+                "description": "Процесс авторизации пользователя с получением токена.",
+                "operationId": "fb49e8d72f19b82209ffe2838f403648",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test-email@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная авторизация",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "test-name"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "test-email@gmail.com"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "1|IHK2E1DunUijLbKZKOAHyLqFSVNGBdv3bkriY3OA4bf72158"
+                                                },
+                                                "token_expires_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "10.09.2024 21:40"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Ошибка авторизации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Authorization error, check your email or password"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка создания токена",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to create token"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Превышен лимит запросов",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Too many requests, please try again later."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Регистрация пользователя",
+                "description": "Процесс регистрации пользователя.",
+                "operationId": "3dc0ef7bb396078e1f48742c40a63d35",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "test-name"
+                                    },
+                                    "email": {
+                                        "description": "Email должен быть уникальным.",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test-email@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "Пароль должен быть не меньше 8 символов.",
+                                        "type": "string",
+                                        "minLength": 8,
+                                        "example": "12345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешная регистрация",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "test-name"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "test-email@gmail.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Ошибка регистрации пользователя",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to create user"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Превышен лимит запросов",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Too many requests, please try again later."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получение информации о пользователе",
+                "description": "Возвращает информацию о текущем пользователе, используя Bearer токен для аутентификации.",
+                "operationId": "d937b6c03db5080481a9f45dcef46c87",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer токен, полученный при авторизации",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "3|BxfgXjsM4TL0r2DGqE2iPyOXFtn2BOwdIYGmircLb2d4f9c2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный запрос информации о пользователе",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "test-name"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "test-email@gmail.com"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "3|BxfgXjsM4TL0r2DGqE2iPyOXFtn2BOwdIYGmircLb2d4f9c2"
+                                                },
+                                                "token_expires_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "10.09.2024 22:28"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Неверный или отсутствующий токен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Элемент не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not found token"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Превышен лимит запросов",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Too many requests, please try again later."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/weather": {
+            "post": {
+                "tags": [
+                    "Weather"
+                ],
+                "summary": "Получение информации о погоде",
+                "description": "Возвращает информацию о погоде для указанного города. Если город не передан, используется местоположение по IP.",
+                "operationId": "a8368a5ad4a8ff3afe99ebf7c698722a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "units"
+                                ],
+                                "properties": {
+                                    "city": {
+                                        "description": "Название города. Если не передано, используется местоположение по IP",
+                                        "type": "string",
+                                        "example": "Minsk"
+                                    },
+                                    "units": {
+                                        "description": "Единицы измерения температуры. Допустимые значения: metric, imperial",
+                                        "type": "string",
+                                        "enum": [
+                                            "metric",
+                                            "imperial"
+                                        ],
+                                        "example": "metric"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Успешный запрос информации о погоде",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "temperature": {
+                                                    "description": "Температура воздуха",
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 15.26
+                                                },
+                                                "pressure": {
+                                                    "description": "Атмосферное давление",
+                                                    "type": "integer",
+                                                    "example": 1009
+                                                },
+                                                "humidity": {
+                                                    "description": "Влажность",
+                                                    "type": "integer",
+                                                    "example": 46
+                                                },
+                                                "rain_chance": {
+                                                    "description": "Вероятность дождя",
+                                                    "type": "integer",
+                                                    "example": 0
+                                                },
+                                                "wind_speed": {
+                                                    "description": "Скорость ветра",
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 2.52
+                                                },
+                                                "wind_degree": {
+                                                    "description": "Направление ветра",
+                                                    "type": "integer",
+                                                    "example": 149
+                                                },
+                                                "description": {
+                                                    "description": "Описание погоды",
+                                                    "type": "string",
+                                                    "example": "overcast clouds"
+                                                },
+                                                "icon": {
+                                                    "description": "Иконка погоды",
+                                                    "type": "string",
+                                                    "example": "https://openweathermap.org/img/wn/04n.png"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized - Неверный или отсутствующий токен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Превышен лимит запросов",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Too many requests, please try again later."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Аутентификация"
+        },
+        {
+            "name": "User",
+            "description": "Пользователь"
+        },
+        {
+            "name": "Weather",
+            "description": "Получение погоды"
+        }
+    ]
+}
