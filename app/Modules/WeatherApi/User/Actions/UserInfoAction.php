@@ -27,12 +27,18 @@ class UserInfoAction
                 throw new NotFoundException("Not found user");
             }
 
+            $token = $user->tokens()->where('name', 'weather-api-token')->first();
+
+            if (!$token) {
+                throw new NotFoundException("Not found token");
+            }
+
             return new UserDto(
                 $user->id,
                 $user->name,
                 $user->email,
                 $request->bearerToken(),
-                Carbon::parse($user->tokens()->accessToken->expires_at)->format("d.m.Y H:i")
+                Carbon::parse($token->expires_at)->format("d.m.Y H:i")
             );
         } catch (Exception $exception) {
             throw $exception;
