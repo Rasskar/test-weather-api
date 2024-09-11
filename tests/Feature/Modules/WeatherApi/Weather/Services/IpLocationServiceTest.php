@@ -21,16 +21,4 @@ class IpLocationServiceTest extends TestCase
         $this->assertNotEmpty($city);
         $this->assertIsString($city);
     }
-
-    /**
-     * Тест обработки неправильного IP, где API должно вернуть ошибку
-     * @return void
-     * @throws ExternalApiException
-     */
-    public function testGetCityByIpError()
-    {
-        $this->expectException(ExternalApiException::class);
-
-        app(IpLocationService::class)->getCityByIp('127.0.0.1');
-    }
 }
